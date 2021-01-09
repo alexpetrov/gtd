@@ -14,7 +14,6 @@
                          :tune/band "David Sanborn"
                          :tune/youtube "https://www.youtube.com/embed/eGAgpn_m-ZE?start=170"
                          :tune/discogs "https://www.discogs.com/ru/David-Sanborn-Hearsay/release/2459059"
-                         ;; :tune/youtube "https://www.youtube.com/embed/eGAgpn_m-ZE?start=170"
                          :tune/comment "First guitar tone I got obsessed with when I was 14"}
 
                        {:db/id -2
