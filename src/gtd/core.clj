@@ -39,12 +39,12 @@
 (def tmpl "templates/gtd.html")
 
 (html/defsnippet tune tmpl [:div.tune]
-  [tune]
-  [:.title] (html/html-content (:tune/title tune))
-  [:.band] (html/html-content (:tune/band tune))
-  [:.comment] (html/html-content (:tune/comment tune))
-  [:iframe.youtube] (html/set-attr :src (:tune/youtube tune))
-  [:.discogs] (if (:tune/discogs tune) (html/set-attr :src (:tune/discogs tune)) nil)
+  [{:keys [tune/title tune/band tune/comment tune/youtube tune/discogs] :as tune}]
+  [:.title] (html/html-content title)
+  [:.band] (html/html-content band)
+  [:.comment] (html/html-content comment)
+  [:iframe.youtube] (html/set-attr :src youtube)
+  [:.discogs] (if (nil? discogs) nil (html/set-attr :src discogs))
   )
 
 ;; (-main)
