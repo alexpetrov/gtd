@@ -13,6 +13,7 @@
                          :tune/title "Little Face"
                          :tune/band "David Sanborn"
                          :tune/youtube "https://www.youtube.com/embed/eGAgpn_m-ZE?start=170"
+                         :tune/discogs "https://www.discogs.com/ru/David-Sanborn-Hearsay/release/2459059"
                          ;; :tune/youtube "https://www.youtube.com/embed/eGAgpn_m-ZE?start=170"
                          :tune/comment "First guitar tone I got obsessed with when I was 14"}
 
@@ -24,10 +25,12 @@
 
     @conn))
 
+;; (-main)
+
 (defn all-tunes [db]
   (->> (d/q '[:find ?id :where [?id _ _]] db)
        (map #(entity db (first %1)))
-       ))
+       (reverse)))
 
 
 (defn render [t]
@@ -41,6 +44,7 @@
   [:.band] (html/html-content (:tune/band tune))
   [:.comment] (html/html-content (:tune/comment tune))
   [:iframe.youtube] (html/set-attr :src (:tune/youtube tune))
+  [:.discogs] (if (:tune/discogs tune) (html/set-attr :src (:tune/discogs tune)) nil)
   )
 
 ;; (-main)
