@@ -3,7 +3,7 @@
             [datascript.core :as d]))
 
 (defn entity [db id]
-  (->> (d/touch (d/entity db id))
+  (->> (d/entity db id)
        (into {})))
 
 (defn db []
@@ -74,8 +74,12 @@
 
 (def tmpl "templates/gtd.html")
 
+;; (html/deftemplate tune-features tmpl [:div.tune-features]
+;;   [features]
+;;   )
+
 (html/defsnippet tune tmpl [:div.tune]
-  [{:keys [tune/title tune/band tune/comment tune/youtube tune/discogs] :as tune}]
+  [{:keys [tune/title tune/band tune/comment tune/youtube tune/discogs]}]
   [:.title] (html/html-content title)
   [:.band] (html/html-content band)
   [:.comment] (html/html-content comment)
@@ -104,4 +108,10 @@
   (-main)
   (all-tunes (db))
   (d/q '[:find ?id :where [?id _ _]] (db))
+
+  (->> (all-tunes (db))
+       (first)
+       (:tune/features)
+       (map #(entity (db) (:db/id %1)))
+       )
   )
