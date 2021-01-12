@@ -7,7 +7,8 @@
        (into {})))
 
 (defn db []
-  (let [schema {:feature/id {:db/unique :db.unique/identity}
+  (let [schema {:tune/id {:db/unique :db.unique/identity}
+                :feature/id {:db/unique :db.unique/identity}
                 :feature-kind/id {:db/unique :db.unique/identity}
 
                 :feature/kind {:db/cardinality :db.cardinality/one :db/valueType :db.type/ref}
@@ -62,12 +63,20 @@
 
 ;; (-main)
 
+(def tune-with-features-pattern '[* {:tune/features [* {:feature/kind [*]}]}])
+(defn tune-with-features [db id]
+  (d/pull db tune-with-features-pattern id))
+
 (defn all-tunes [db]
   (->> (d/q '[:find ?id ?tid :where [?id :tune/id ?tid]] db)
-       (map #(entity db (first %1)))
+       (map #(tune-with-features db (first %1)))
        (reverse)))
 
 ;; (all-tunes (db))
+;;
+;; (d/pull (db) '[:feature/title {:feature/kind [:db/id :feature-kind/title]}] [:feature/id "telecaster"])
+;; (d/pull (db) '[:tune/title :tune/id {:tune/features [* {:feature/kind [*]}]}] [:tune/id "little_face"])
+
 
 (defn render [t]
   (reduce str t))
