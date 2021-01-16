@@ -55,7 +55,7 @@
                         :tune/discogs "https://www.discogs.com/ru/David-Sanborn-Hearsay/release/2459059"
                         :tune/comment "First guitar tone I got obsessed with when I was 14"
                         :tune/features [[:feature/id "robben_ford"]
-                                        [:feature/id "stratocaster"]]}
+                                        [:feature/id "telecaster"]]}
 
                        {:db/id -400
                         :tune/id "blues_for_narada"
