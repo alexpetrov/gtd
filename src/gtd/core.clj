@@ -118,12 +118,12 @@
 
 (html/defsnippet tune tmpl [:div.tune]
   [{:keys [tune/title tune/band tune/comment tune/youtube tune/discogs tune/features tune/id]}]
-  [:.title] (html/content title)
-  [:.band] (html/content band)
-  [:.comment] (html/content comment)
+  [:span.title] (html/content title)
+  [:span.band] (html/content band)
+  [:div.comment] (html/content comment)
   [:iframe.youtube] (html/set-attr :src youtube)
-  [:.discogs] (if (nil? discogs) nil (html/set-attr :src discogs))
-  [:.tune-features] (html/content (tune-features id))
+  [:a.discogs] (if (nil? discogs) nil (html/set-attr :src discogs))
+  [:div.tune-features] (html/content (tune-features id))
   )
 
 ;; (-main)
