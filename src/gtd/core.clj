@@ -17,10 +17,12 @@
         conn (d/create-conn schema)]
     (d/transact! conn [{:db/id -100
                         :feature-kind/id "guitar"
+                        :feature-kind/title "Guitar"
                         :feature-kind/description "Kind of guitar"}
 
                        {:db/id -101
                         :feature-kind/id "guitarist"
+                        :feature-kind/title "Guitarist"
                         :feature-kind/description "Musician playing on guitar in the tune"}
 
                        {:db/id -200
@@ -88,7 +90,9 @@
                               [?feature-id :feature/kind ?fkid]
                               ]
                             db [:feature-kind/id feature-kind-id] [:tune/id tune-id])]
-    (d/pull db '[*] (ffirst feature-db-ids))))
+    (d/pull db '[* {:feature/kind [*]}] (ffirst feature-db-ids))))
+
+
 
 ;; (def test-data [{:db/id 5, :feature/description "Gary Moore //TBD", :feature/id "gary_moore", :feature/kind {:db/id 2, :feature-kind/description "Musician playing on guitar in the tune", :feature-kind/id "guitarist"}, :feature/title "Gary Moore"}])
 
@@ -104,10 +108,11 @@
 
 (def tmpl "templates/gtd.html")
 
-(html/defsnippet tune-feature tmpl [:td.tune-feature]
-  [{:keys [feature/title feature/description]}]
-  [:span.value] (html/content title)
-  [:span.value] (html/set-attr :title description)
+(html/defsnippet tune-feature tmpl [:span.tune-feature]
+  [{:keys [feature/title feature/description feature/kind]}]
+  [:span.tune-feature-kind] (html/content (:feature-kind/title kind))
+  [:span.tune-feature-value] (html/content title)
+  [:span.tune-feature-value] (html/set-attr :title description)
   )
 
 (html/defsnippet tune-features tmpl [:div.tune-features]
@@ -123,7 +128,7 @@
   [:div.comment] (html/content comment)
   [:iframe.youtube] (html/set-attr :src youtube)
   [:a.discogs] (if (nil? discogs) nil (html/set-attr :src discogs))
-  [:div.tune-features] (html/content (tune-features id))
+  [:div.tune-features] (html/content (map tune-feature features))
   )
 
 ;; (-main)
