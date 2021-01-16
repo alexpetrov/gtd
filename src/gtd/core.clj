@@ -104,10 +104,16 @@
 
 (def tmpl "templates/gtd.html")
 
+(html/defsnippet tune-feature tmpl [:td.tune-feature]
+  [{:keys [feature/title feature/description]}]
+  [:span.value] (html/content title)
+  [:span.value] (html/set-attr :title description)
+  )
+
 (html/defsnippet tune-features tmpl [:div.tune-features]
   [tune-id]
-  [:span.guitarist] (html/content (:feature/title (feature (db) "guitarist" tune-id)))
-  [:span.guitar] (html/content (:feature/title (feature (db) "guitar" tune-id)))
+  [:tr.guitarist] (html/content (tune-feature (feature (db) "guitarist" tune-id)))
+  [:tr.guitar] (html/content (tune-feature (feature (db) "guitar" tune-id)))
   )
 
 (html/defsnippet tune tmpl [:div.tune]
