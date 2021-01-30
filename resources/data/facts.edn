@@ -39,6 +39,7 @@
   :tune/title "Blues For Narada"
   :tune/band "Gary Moore"
   :tune/youtube "https://www.youtube.com/embed/EntSKjMghnI"
+  :tune/discogs "https://www.discogs.com/ru/Gary-Moore-Ballads-Blues-1982-1994/release/395564"
   :tune/comment "Second guitar tone I got obsessed with when I was 15"
   :tune/features [[:feature/id "gary_moore"]
                   [:feature/id "telecaster"]]}]
