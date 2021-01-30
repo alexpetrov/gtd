@@ -76,7 +76,7 @@
   [:span.band] (html/content band)
   [:div.comment] (html/content comment)
   [:iframe.youtube] (html/set-attr :src youtube)
-  [:a.discogs] (if (nil? discogs) nil (html/set-attr :src discogs))
+  [:a.discogs] (if (nil? discogs) nil (html/set-attr :href discogs))
   [:div.tune-features] (html/content (map tune-feature features))
   )
 
