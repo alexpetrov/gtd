@@ -7,6 +7,7 @@
        (into {})))
 
 (defn facts [] (read-string (slurp "resources/data/facts.edn")))
+(defn schema [] (read-string (slurp "resources/data/schema.edn")))
 
 (defn facts-with-ids [facts]
   (map
@@ -14,16 +15,8 @@
    (partition 2 (interleave facts (range)))))
 
 (defn db []
-  (let [schema {:tune/id {:db/unique :db.unique/identity}
-                :feature/id {:db/unique :db.unique/identity}
-                :feature-kind/id {:db/unique :db.unique/identity}
-
-                :feature/kind {:db/cardinality :db.cardinality/one :db/valueType :db.type/ref}
-                :tune/features {:db/cardinality :db.cardinality/many :db/valueType :db.type/ref}
-                }
-        conn (d/create-conn schema)]
+  (let [conn (d/create-conn (schema))]
     (d/transact! conn (facts-with-ids (facts)))
-
     @conn))
 
 ;; (-main)

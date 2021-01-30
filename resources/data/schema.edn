@@ -1,0 +1,6 @@
+{:tune/id {:db/unique :db.unique/identity}
+ :feature/id {:db/unique :db.unique/identity}
+ :feature-kind/id {:db/unique :db.unique/identity}
+
+ :feature/kind {:db/cardinality :db.cardinality/one :db/valueType :db.type/ref}
+ :tune/features {:db/cardinality :db.cardinality/many :db/valueType :db.type/ref}}
