@@ -1,6 +1,7 @@
 (ns gtd.core
   (:require [net.cgrand.enlive-html :as html]
-            [datascript.core :as d]))
+            [datascript.core :as d]
+            [clojure.math.combinatorics :as combinatorics]))
 
 (defn entity [db id]
   (->> (d/entity db id)
@@ -30,6 +31,18 @@
        (map #(tune-with-features db (first %1)))
        (reverse)))
 
+(defn feature-data [db id]
+  (d/pull db '[* {:feature/kind [*]}] id))
+
+(defn all-features [db feature-ids]
+  (map #(feature-data db %1) feature-ids))
+
+(defn all-features-ids [db]
+  (->> (d/q '[:find ?id ?fid :where [?id :feature/id ?fid]] db)
+       (map first)))
+
+;; (all-features-ids (db))
+;; (all-features (db) (all-features-ids (db)))
 
 (defn feature [db feature-kind-id tune-id]
   (let [feature-db-ids (d/q '[:find ?feature-id
@@ -107,4 +120,11 @@
        (:tune/features)
        (map #(entity (db) (:db/id %1)))
        )
+  (->> [1 2 3]
+       (combinatorics/subsets)
+       (remove empty?)
+       (map set)
+       (set))
+
+
   )
