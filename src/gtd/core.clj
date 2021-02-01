@@ -23,6 +23,7 @@
 ;; (-main)
 
 (def tune-with-features-pattern '[* {:tune/features [* {:feature/kind [*]}]}])
+;; FIXME: rename to tune-data or something else
 (defn tune-with-features [db id]
   (d/pull db tune-with-features-pattern id))
 
@@ -43,6 +44,32 @@
 
 ;; (all-features-ids (db))
 ;; (all-features (db) (all-features-ids (db)))
+
+(defn tunes-with-some-features [db feature-ids]
+  (d/q '[:find (count ?id) (distinct ?id)
+         :in $ [?fid ...]
+         :where
+         [?id :tune/features ?fid]]
+       db feature-ids))
+
+;; (tunes-with-some-features (db) (all-features-ids (db)))
+
+;; FIXME: This function is WIP. Seems like we have to use just Clojure code for this task instead of Datalog.
+(defn tunes-with-all-features [db feature-ids]
+  (d/q '[:find (count ?id) (distinct ?id)
+         :in $ $features
+         :where
+         [?id :tune/id]
+         (not-join [?id]
+                   [?id :tune/features ?fid]
+                   (not [$features ?fid]))
+         ]
+       db
+       (map vector feature-ids)))
+
+;; (all-features-ids (db)) (6 3 4 5)
+;; (tunes-with-all-features (db) '(6 4 3 5))
+
 
 (defn feature [db feature-kind-id tune-id]
   (let [feature-db-ids (d/q '[:find ?feature-id
