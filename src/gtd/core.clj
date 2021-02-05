@@ -54,22 +54,19 @@
 
 ;; (tunes-with-some-features (db) (all-features-ids (db)))
 
-;; FIXME: This function is WIP. Seems like we have to use just Clojure code for this task instead of Datalog.
-(defn tunes-with-all-features [db feature-ids]
-  (d/q '[:find (count ?id) (distinct ?id)
-         :in $ $features
-         :where
-         [?id :tune/id]
-         (not-join [?id]
-                   [?id :tune/features ?fid]
-                   (not [$features ?fid]))
-         ]
-       db
-       (map vector feature-ids)))
+(defn all-features-present? [feature-ids tune]
+  (let [tune-feature-ids-set (set (map :db/id (:tune/features tune)))
+        feature-ids-set (set feature-ids)]
+    (empty? (clojure.set/difference feature-ids-set tune-feature-ids-set))))
 
+;; (all-features-present? '(6) (first (all-tunes (db))))
+(defn tunes-with-all-features [db feature-ids]
+  (->> (all-tunes db)
+       (filter #(all-features-present? feature-ids %))))
+
+;; (tunes-with-all-features (db) '(6))
 ;; (all-features-ids (db)) (6 3 4 5)
 ;; (tunes-with-all-features (db) '(6 4 3 5))
-
 
 (defn feature [db feature-kind-id tune-id]
   (let [feature-db-ids (d/q '[:find ?feature-id
@@ -81,8 +78,6 @@
                             db [:feature-kind/id feature-kind-id] [:tune/id tune-id])]
     (d/pull db '[* {:feature/kind [*]}] (ffirst feature-db-ids))))
 
-
-
 ;; (def test-data [{:db/id 5, :feature/description "Gary Moore //TBD", :feature/id "gary_moore", :feature/kind {:db/id 2, :feature-kind/description "Musician playing on guitar in the tune", :feature-kind/id "guitarist"}, :feature/title "Gary Moore"}])
 
 ;; (all-tunes (db))
@@ -90,7 +85,6 @@
 ;;
 ;; (d/pull (db) '[:feature/title {:feature/kind [:db/id :feature-kind/title]}] [:feature/id "telecaster"])
 ;; (d/pull (db) '[:tune/title :tune/id {:tune/features [* {:feature/kind [*]}]}] [:tune/id "little_face"])
-
 
 (defn render [t]
   (reduce str t))
