@@ -42,6 +42,14 @@
   (->> (d/q '[:find ?id ?fid :where [?id :feature/id ?fid]] db)
        (map first)))
 
+(defn feature-subsets [db]
+  (->> (all-features-ids db)
+       (combinatorics/subsets)
+       (remove empty?)
+       (map set)
+       (set)))
+
+;; (feature-subsets (db))
 ;; (all-features-ids (db))
 ;; (all-features (db) (all-features-ids (db)))
 
@@ -59,12 +67,14 @@
         feature-ids-set (set feature-ids)]
     (empty? (clojure.set/difference feature-ids-set tune-feature-ids-set))))
 
+;; (clojure.set/difference #{1 2} #{1 3 4})
+
 ;; (all-features-present? '(6) (first (all-tunes (db))))
 (defn tunes-with-all-features [db feature-ids]
   (->> (all-tunes db)
        (filter #(all-features-present? feature-ids %))))
 
-;; (tunes-with-all-features (db) '(6))
+;; (count (tunes-with-all-features (db) '(5 3)))
 ;; (all-features-ids (db)) (6 3 4 5)
 ;; (tunes-with-all-features (db) '(6 4 3 5))
 
@@ -127,8 +137,29 @@
        (render)
        ))
 
+(defn generate-page-for-tunes-with-feature-set [db tunes feature-set-db-ids]
+  (let [features (all-features db feature-set-db-ids)
+        feature-ids (map :feature/id features)
+        feature-names-joined (apply str (interpose "-" feature-ids))
+        url (apply str (concat "public/" feature-names-joined ".html"))
+        file-name (apply str (concat "resources/" url))
+        page-source (->> tunes (base) (render))]
+    (spit file-name page-source)
+    [feature-names-joined (count tunes)]))
+
+(defn generate-page-for-feature-set [db feature-set-db-ids]
+  (let [tunes (tunes-with-all-features db feature-set-db-ids)]
+    (if (empty? tunes)
+      nil
+      (generate-page-for-tunes-with-feature-set db tunes feature-set-db-ids))))
+
+(defn generate-pages-for-all-feature-sets []
+  (->> (feature-subsets (db))
+       (map #(generate-page-for-feature-set (db) %))))
+
+;; (generate-pages-for-all-feature-sets)
+
 (defn -main [& args]
-  (println (index))
   (spit "resources/public/index.html" (index)))
 
 (comment
