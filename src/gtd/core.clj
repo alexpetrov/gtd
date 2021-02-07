@@ -3,6 +3,9 @@
             [datascript.core :as d]
             [clojure.math.combinatorics :as combinatorics]))
 
+(defn dot-html [s]
+  (str s ".html"))
+
 (defn entity [db id]
   (->> (d/entity db id)
        (into {})))
@@ -102,7 +105,8 @@
 (def tmpl "templates/gtd.html")
 
 (html/defsnippet tune-feature tmpl [:span.tune-feature]
-  [{:keys [feature/title feature/description feature/kind]}]
+  [{:keys [feature/title feature/description feature/kind feature/id]}]
+  [:a.tune-feature-link] (html/set-attr :href (dot-html id))
   [:span.tune-feature-kind] (html/content (:feature-kind/title kind))
   [:span.tune-feature-value] (html/content title)
   [:span.tune-feature-value] (html/set-attr :title description)
@@ -140,9 +144,9 @@
 (defn generate-page-for-tunes-with-feature-set [db tunes feature-set-db-ids]
   (let [features (all-features db feature-set-db-ids)
         feature-ids (map :feature/id features)
-        feature-names-joined (apply str (interpose "-" feature-ids))
-        url (apply str (concat "public/" feature-names-joined ".html"))
-        file-name (apply str (concat "resources/" url))
+        feature-names-joined (clojure.string/join "-" feature-ids)
+        url (str "public/" (dot-html feature-names-joined))
+        file-name (str "resources/" url)
         page-source (->> tunes (base) (render))]
     (spit file-name page-source)
     [feature-names-joined (count tunes)]))
@@ -160,7 +164,8 @@
 ;; (generate-pages-for-all-feature-sets)
 
 (defn -main [& args]
-  (spit "resources/public/index.html" (index)))
+  (spit "resources/public/index.html" (index))
+  (generate-pages-for-all-feature-sets))
 
 (comment
   (-main)
