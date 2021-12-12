@@ -1,6 +1,7 @@
 (ns gtd.core
   (:require [net.cgrand.enlive-html :as html]
             [datascript.core :as d]
+            [clojure.zip :as z]
             [clojure.math.combinatorics :as combinatorics]))
 
 (defn dot-html [s]
@@ -162,6 +163,13 @@
        (map #(generate-page-for-feature-set (db) %))))
 
 ;; (generate-pages-for-all-feature-sets)
+
+;; ------------------ feature tree -----------------------------------------------
+;; TODO: Exstract to separate namespace when it is done
+
+
+
+;; ------------------ feature tree -----------------------------------------------
 
 (defn -main [& args]
   (spit "resources/public/index.html" (index))
