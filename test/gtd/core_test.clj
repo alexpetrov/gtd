@@ -1,6 +1,7 @@
 (ns gtd.core-test
   (:require [clojure.test :refer :all]
-            [gtd.core :refer :all]))
+            [gtd.core :refer :all]
+            [clojure.zip :as zip]))
 
 (def features #{"a" "b" "c"})
 
@@ -17,8 +18,27 @@
   (let [rest-features (clojure.set/difference features path)]
     (into [] (map (fn [feature] {:feature feature :objects (objects-with-features objects (conj path feature))}) rest-features))))
 
-(defn features-objects-tree [features objects]
-  [])
+(defn get-children-nodes []
+  (fn [node]
+    (let [path (:path node)
+          _ (println path)]
+      (get-children (:path node) features objects)))
+  )
+
+(defn features-objects-zipper [root_feature features objects]
+  (zip/zipper (constantly true) ;; FIXME: children? must not be constantly true, because at least at some oponint there will be no features left in the set
+              get-children-nodes
+              (fn [n children] (assoc n :children children))
+              root_feature)) ;; FIXME: it turns out, that we cannot solve a problem with dynamic tree. Tree must be static and only zipper have to be used to traverse it and to build a visual tree.
+
+(comment
+  (-> (features-objects-zipper "a" features objects)
+      (z/node)))
+
+(defn features-objects-tree [root_feature features objects])
+
+(defn features-objects-forest [features objects]
+  (map features))
 
 (deftest test-get-children
   (is (= [{:feature "a", :objects ["ac" "abc"]} {:feature "b", :objects ["bc" "abc"]}]
