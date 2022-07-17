@@ -58,7 +58,8 @@
   :tune/comment "Magic guitar tone I discovered and got obsessed with when I was 37"
   :tune/features [[:feature/id "ronnie_earl"]
                   [:feature/id "stratocaster"]
-                  [:feature/id "super_reverb"]]}
+                  [:feature/id "super_reverb"]
+                  [:feature/id "bf"]]}
 
  {:tune/id "little_face"
   :tune/title "Little Face"
