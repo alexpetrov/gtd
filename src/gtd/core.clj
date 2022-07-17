@@ -165,7 +165,7 @@
 
 (defn -main [& args]
   (spit "resources/public/index.html" (index))
-  (generate-pages-for-all-feature-sets))
+  (println (generate-pages-for-all-feature-sets)))
 
 (comment
   (-main)
