@@ -2,6 +2,14 @@
   :feature-kind/title "Guitar"
   :feature-kind/description "Kind of guitar"}
 
+ {:feature-kind/id "amp_family"
+  :feature-kind/title "Amplifier family"
+  :feature-kind/description "Big architectural family of amplifiers (Tweed, BF, Marshall Plexi, Vox)"}
+
+ {:feature-kind/id "amp"
+  :feature-kind/title "Amplifier"
+  :feature-kind/description "Particular model of amplifier"}
+
  {:feature-kind/id "guitarist"
   :feature-kind/title "Guitarist"
   :feature-kind/description "Musician playing on guitar in the tune"}
@@ -15,6 +23,17 @@
   :feature/title "Stratocaster"
   :feature/kind [:feature-kind/id "guitar"]
   :feature/description "Second Leo Fender's solid body guitar"}
+
+ ;; TODO: add ability to features to have references to other features and add Blackface to Super Reverb
+ {:feature/id "bf"
+  :feature/title "Fender Blackface"
+  :feature/kind [:feature-kind/id "amp_family"]
+  :feature/description "Passive equalizer stacked beween two halves of the first tube (V1), which gives mid scoopiness. Reverb and tremolo (modulation of the volume) on board. Fixed bias of output tubes gives tight low end and biggest output power."}
+
+ {:feature/id "super_reverb"
+  :feature/title "Fender Super Reverb"
+  :feature/kind [:feature-kind/id "amp"]
+  :feature/description "'Holy Grail' of clean to overdrive tone with magic reverb and tremolo effects with 4x10' cabinet. Ronnie Earl, Albert Collins, Derek Trucks, Dave Specter, Carl Whethersby are just some of guitarists who has been using Super Reverbs mostly."}
 
  {:feature/id "robben_ford"
   :feature/title "Robben Ford"
@@ -38,7 +57,8 @@
   :tune/discogs "https://www.discogs.com/ru/release/7519706-Ronnie-Earl-And-The-Broadcasters-The-Colour-Of-Love"
   :tune/comment "Magic guitar tone I discovered and got obsessed with when I was 37"
   :tune/features [[:feature/id "ronnie_earl"]
-                  [:feature/id "stratocaster"]]}
+                  [:feature/id "stratocaster"]
+                  [:feature/id "super_reverb"]]}
 
  {:tune/id "little_face"
   :tune/title "Little Face"
