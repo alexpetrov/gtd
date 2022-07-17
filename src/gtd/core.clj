@@ -169,6 +169,8 @@
 
 (comment
   (-main)
+
+  (generate-pages-for-all-feature-sets)
   (all-tunes (db))
   (d/q '[:find ?id :where [?id _ _]] (db))
 

@@ -26,6 +26,20 @@
   :feature/kind [:feature-kind/id "guitarist"]
   :feature/description "Gary Moore //TBD"}
 
+ {:feature/id "ronnie_earl"
+  :feature/title "Ronnie Earl"
+  :feature/kind [:feature-kind/id "guitarist"]
+  :feature/description "Ronnie Earl - soulful guitar player from Texas, who really plays music to speak to God and to touch people's souls, not to show off. He quit making a lot of concerts quite early in his career."}
+
+ {:tune/id "round_midnight"
+  :tune/title "'Round Midnight"
+  :tune/band "Ronnie Earl"
+  :tune/youtube "https://www.youtube.com/embed/3SPuIDb5pkg"
+  :tune/discogs "https://www.discogs.com/ru/release/7519706-Ronnie-Earl-And-The-Broadcasters-The-Colour-Of-Love"
+  :tune/comment "Magic guitar tone I discovered and got obsessed with when I was 37"
+  :tune/features [[:feature/id "ronnie_earl"]
+                  [:feature/id "stratocaster"]]}
+
  {:tune/id "little_face"
   :tune/title "Little Face"
   :tune/band "David Sanborn"
